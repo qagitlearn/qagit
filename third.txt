@@ -1,2 +1,4 @@
 third file
 Add first info in Master
+Add first info in the third file
+bugfix - add first info third file
