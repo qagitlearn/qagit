@@ -1,3 +1,3 @@
-This is the README.md\n
-Add one info\n
-Second info in the first file\n
+# This is the README.md
+Add one info
+Second info in the first file
