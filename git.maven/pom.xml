@@ -10,16 +10,158 @@
   <name>git.maven</name>
   <url>http://maven.apache.org</url>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<lib.jars.path>${project.basedir}/lib</lib.jars.path>
+		<lib.jars.xalan.path>${lib.jars.path}/xalan</lib.jars.xalan.path>
+		<jira.version>2.0.0-m2</jira.version>
+	</properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+	<dependencies>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.8.21</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+		</dependency>
+	<!-- 
+		<dependency>
+			<groupId>com.atlassian.jira</groupId>
+			<artifactId>jira-rest-java-client</artifactId>
+			<version>${jira.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.codecentric</groupId>
+			<artifactId>jbehave-junit-runner</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jbehave</groupId>
+			<artifactId>jbehave-core</artifactId>
+			<version>3.9.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jcifs</groupId>
+			<artifactId>jcifs</artifactId>
+			<version>1.3.17</version>
+		</dependency>
+		<dependency>
+			<groupId>xalan</groupId>
+			<artifactId>xalan</artifactId>
+			<version>2.7.2</version>
+		</dependency>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>2.9.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.atlassian.jira</groupId>
+			<artifactId>jira-rest-java-client</artifactId>
+			<version>${jira.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+ -->	
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+					<execution>
+						<id>fetch-lib-jars</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${lib.jars.path}</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<echo>ant task</echo>
+								<mkdir dir="${lib.jars.xalan.path}" />
+								<move file="${lib.jars.path}/xalan-2.7.2.jar" todir="${lib.jars.xalan.path}" />
+								<move file="${lib.jars.path}/xercesImpl-2.9.1.jar" todir="${lib.jars.xalan.path}" />
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>${lib.jars.path}</directory>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<!-- Repository for ORACLE ojdbc6. -->
+		<repository>
+			<id>codelds</id>
+			<url>https://code.lds.org/nexus/content/groups/main-repo</url>
+		</repository>
+
+		<repository>
+			<id>ibiblio</id>
+			<url>http://mirrors.ibiblio.org/maven/mule/dependencies/maven2/</url>
+		</repository>
+		<repository>
+			<id>jenkins-releases</id>
+			<url>http://repo.jenkins-ci.org/releases/</url>
+		</repository>
+		<repository>
+			<id>central</id>
+			<name>Atlassian Public Repository</name>
+			<layout>default</layout>
+			<url>http://maven.atlassian.com/public</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>alfresco</id>
+			<url>https://maven.alfresco.com/nexus/content/repositories/public/</url>
+		</repository>
+		<repository>
+			<id>thirdparty</id>
+			<name>3rd party releases</name>
+			<url>http://newbuild.talend.com:8081/nexus/content/repositories/thirdparty-releases</url>
+		</repository>
+		<repository>
+			<id>snapshot</id>
+			<name>3rd party releases snapshot</name>
+			<url>http://newbuild.talend.com:8081/nexus/content/repositories/snapshots/</url>
+		</repository>
+	</repositories>
 </project>
